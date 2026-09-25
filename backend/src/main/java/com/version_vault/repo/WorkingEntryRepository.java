@@ -9,20 +9,8 @@ import java.util.UUID;
 
 public interface WorkingEntryRepository extends JpaRepository<WorkingEntry, UUID> {
 
-    Optional<WorkingEntry> findByBranchIdAndPath(
-            UUID branchId,
-            String path
-    );
+    Optional<WorkingEntry> findByBranchIdAndPath(UUID branchId, String path);
 
-    boolean existsByBranchIdAndPath(
-            UUID branchId,
-            String path
-    );
+    List<WorkingEntry> findAllByBranchIdOrderByPathAsc(UUID branchId);
 
-    List<WorkingEntry> findAllByBranchId(UUID branchId);
-
-    void deleteByBranchIdAndPath(
-            UUID branchId,
-            String path
-    );
 }

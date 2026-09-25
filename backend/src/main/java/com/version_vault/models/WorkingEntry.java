@@ -49,11 +49,7 @@ public class WorkingEntry extends BaseEntity {
     protected WorkingEntry() {
     }
 
-    public WorkingEntry(
-            Branch branch,
-            String path,
-            ObjectEntity object
-    ) {
+    public WorkingEntry(Branch branch, String path, ObjectEntity object) {
         super(UUID.randomUUID(), Instant.now());
         this.branch = branch;
         this.path = path;
