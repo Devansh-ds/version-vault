@@ -14,3 +14,7 @@ spring:
   flyway:
     locations: classpath:db/migration
     enabled: true
+
+application:
+  storage:
+    root: './storage'

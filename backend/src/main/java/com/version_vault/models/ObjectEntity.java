@@ -7,6 +7,9 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Entity
 @Table(
         name = "objects",
@@ -38,6 +41,7 @@ public class ObjectEntity extends BaseEntity {
     protected ObjectEntity() {}
 
     public ObjectEntity(String contentHash, String storageKey, Long size) {
+        super(UUID.randomUUID(), Instant.now());
         this.contentHash = contentHash;
         this.storageKey = storageKey;
         this.size = size;

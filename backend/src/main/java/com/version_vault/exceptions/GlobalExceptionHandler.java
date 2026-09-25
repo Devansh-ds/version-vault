@@ -43,4 +43,11 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errors));
     }
 
+    @ExceptionHandler(ObjectStorageException.class)
+    public ResponseEntity<String> handleObjectStorageException(ObjectStorageException ex ) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
+
 }
