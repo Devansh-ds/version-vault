@@ -4,6 +4,7 @@ import com.version_vault.models.Commit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CommitRepository extends JpaRepository<Commit, UUID> {
@@ -18,4 +19,6 @@ public interface CommitRepository extends JpaRepository<Commit, UUID> {
             UUID commitId,
             UUID repositoryId
     );
+
+    Optional<Commit> findByIdAndRepositoryId(UUID headCommitId, UUID repositoryId);
 }
