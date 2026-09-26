@@ -4,11 +4,11 @@ import com.version_vault.models.Manifest;
 import com.version_vault.models.ManifestEntry;
 import com.version_vault.response.ManifestEntryResponse;
 import com.version_vault.response.ManifestResponse;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class ManifestMapper {
 
     public ManifestResponse toManifestResponse(Manifest manifest, List<ManifestEntry> entries) {

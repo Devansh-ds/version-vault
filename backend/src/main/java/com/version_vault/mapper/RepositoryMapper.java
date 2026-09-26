@@ -4,9 +4,10 @@ import com.version_vault.models.Repository;
 import com.version_vault.models.User;
 import com.version_vault.response.RepositoryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class RepositoryMapper {
 

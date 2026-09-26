@@ -60,18 +60,3 @@ public class Branch extends BaseEntity {
         this.updatedAt = Instant.now();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

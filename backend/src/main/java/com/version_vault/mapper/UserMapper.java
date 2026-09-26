@@ -3,9 +3,10 @@ package com.version_vault.mapper;
 import com.version_vault.models.User;
 import com.version_vault.response.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class UserMapper {
 

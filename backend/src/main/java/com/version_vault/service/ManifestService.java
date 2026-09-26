@@ -68,4 +68,34 @@ public class ManifestService {
         return manifestMapper.toManifestResponse(manifest, entries);
     }
 
+    @Transactional
+    public Manifest createManifestEntity(UUID branchId) {
+
+        // check if branch exist or not
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
+
+        // get all working entry of the branch
+        List<WorkingEntry> workingEntries = workingEntryRepository.findAllByBranchIdOrderByPathAsc(branchId);
+
+        // create and save manifest
+        Manifest manifest = new Manifest(branch.getRepository());
+        Manifest savedManifest = manifestRepository.save(manifest);
+
+        // create List<ManifestEntry> from List<WorkingEntry>
+        List<ManifestEntry> manifestEntries = workingEntries.stream()
+                .map(we -> new ManifestEntry(
+                                savedManifest,
+                                we.getPath(),
+                                we.getObject()
+                        )
+                )
+                .toList();
+
+        // save the manifest entries
+        manifestEntryRepository.saveAll(manifestEntries);
+
+        return savedManifest;
+    }
+
 }
