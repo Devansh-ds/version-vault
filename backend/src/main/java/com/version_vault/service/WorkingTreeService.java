@@ -95,9 +95,9 @@ public class WorkingTreeService {
             throw new IllegalArgumentException("Path cannot be empty");
         }
 
-        if (path.startsWith("/")) {
-            throw new IllegalArgumentException("Path cannot start with '/'");
-        }
+//        if (path.startsWith("/")) {
+//            throw new IllegalArgumentException("Path cannot start with '/'");
+//        }
 
         if (path.contains("\\")) {
             throw new IllegalArgumentException("Path must use '/' as separator");

@@ -27,13 +27,18 @@ public class WorkingTreeController {
             return ResponseEntity.badRequest().build();
         }
 
+        path = normalizePath(path);
+
         WorkingEntryResponse response = workingTreeService.addOrUpdateFile(branchId, path, file.getBytes());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{*path}")
-    public ResponseEntity<byte[]> readFile(@PathVariable UUID branchId, @PathVariable String path) throws IOException {
+    public ResponseEntity<byte[]> readFile(@PathVariable UUID branchId, @PathVariable String path) {
+        path = normalizePath(path);
+
         byte[] content =  workingTreeService.readFile(branchId, path);
+
         return ResponseEntity.ok()
                 .contentLength(content.length)
                 .body(content);
@@ -46,8 +51,22 @@ public class WorkingTreeController {
 
     @DeleteMapping("/{*path}")
     public ResponseEntity<Void> deleteFile(@PathVariable UUID branchId, @PathVariable String path) {
+        path = normalizePath(path);
+
         workingTreeService.deleteFile(branchId, path);
         return ResponseEntity.noContent().build();
+    }
+
+    private String normalizePath(String path) {
+        if (path == null || path.isBlank()) {
+            throw new IllegalArgumentException("Path cannot be empty");
+        }
+
+        while (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        return path;
     }
 
 }
