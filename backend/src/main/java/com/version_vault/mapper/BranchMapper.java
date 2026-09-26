@@ -12,7 +12,7 @@ public class BranchMapper {
     public BranchResponse toBranchResponse(Branch branch) {
         return BranchResponse.builder()
                 .id(branch.getId())
-                .headCommitId(branch.getHeadCommit().getId())
+                .headCommitId(branch.getHeadCommit() != null? branch.getHeadCommit().getId():null)
                 .name(branch.getName())
                 .createdAt(branch.getCreatedAt())
                 .updatedAt(branch.getUpdatedAt())

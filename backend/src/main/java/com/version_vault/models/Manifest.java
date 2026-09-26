@@ -38,17 +38,3 @@ public class Manifest extends BaseEntity {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
