@@ -26,6 +26,7 @@ public class BranchService {
     private final RepositoryRepository repositoryRepository;
     private final CommitRepository commitRepository;
     private final BranchMapper branchMapper;
+    private final WorkingTreeService workingTreeService;
 
     public void createMainBranch(Repository repository) {
         Branch branch = new Branch(repository, "main", null);
@@ -55,6 +56,9 @@ public class BranchService {
 
         // save
         Branch savedBranch = branchRepository.save(branch);
+
+        // initialize working tree of new branch from commit's manifest
+        workingTreeService.initializeFromManifestOfCommit(savedBranch.getId(), sourceCommit.getManifest().getId());
 
         return branchMapper.toBranchResponse(savedBranch);
     }

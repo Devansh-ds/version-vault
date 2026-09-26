@@ -3,9 +3,11 @@ package com.version_vault.service;
 import com.version_vault.exceptions.ResourceNotFoundException;
 import com.version_vault.mapper.WorkingEntryMapper;
 import com.version_vault.models.Branch;
+import com.version_vault.models.ManifestEntry;
 import com.version_vault.models.ObjectEntity;
 import com.version_vault.models.WorkingEntry;
 import com.version_vault.repo.BranchRepository;
+import com.version_vault.repo.ManifestEntryRepository;
 import com.version_vault.repo.WorkingEntryRepository;
 import com.version_vault.response.WorkingEntryResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class WorkingTreeService {
     private final ObjectService objectService;
     private final BranchRepository branchRepository;
     private final WorkingEntryMapper  workingEntryMapper;
+    private final ManifestEntryRepository manifestEntryRepository;
 
     @Transactional
     public WorkingEntryResponse addOrUpdateFile(UUID branchId, String path, byte[] content) {
@@ -106,5 +109,33 @@ public class WorkingTreeService {
         if (path.contains("..")) {
             throw new IllegalArgumentException("Path cannot contain '..'");
         }
+    }
+
+    @Transactional
+    public void initializeFromManifestOfCommit(UUID branchId, UUID manifestId) {
+
+        // Find the branch
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Branch not found with id " + branchId
+                        ));
+
+        // Get all files from the source manifest
+        List<ManifestEntry> manifestEntries =
+                manifestEntryRepository
+                        .findAllByManifestIdOrderByPathAsc(manifestId);
+
+        // Convert ManifestEntry -> WorkingEntry
+        List<WorkingEntry> workingEntries = manifestEntries.stream()
+                .map(entry -> new WorkingEntry(
+                        branch,
+                        entry.getPath(),
+                        entry.getObject()
+                ))
+                .toList();
+
+        // Save working tree entries
+        workingEntryRepository.saveAll(workingEntries);
     }
 }
