@@ -19,7 +19,7 @@ public class RepositoryMapper {
                 .createdAt(repository.getCreatedAt())
                 .updatedAt(repository.getUpdatedAt())
                 .ownerId(owner.getId())
-                .ownerName(owner.getUsername())
+                .ownerName(owner.getOriginalUsername())
                 .build();
     }
 

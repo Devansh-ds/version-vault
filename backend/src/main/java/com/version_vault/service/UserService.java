@@ -7,7 +7,9 @@ import com.version_vault.models.User;
 import com.version_vault.repo.UserRepository;
 import com.version_vault.request.CreateUserRequest;
 import com.version_vault.response.UserResponse;
+import com.version_vault.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final JwtService jwtService;
 
     public UserResponse createUser(CreateUserRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -27,7 +30,7 @@ public class UserService {
             throw new ResourceAlreadyExistsException("Email already exists: "  + request.getEmail());
         }
 
-        User user = new User(request.getUsername(), request.getEmail());
+        User user = new User(request.getUsername(), request.getEmail(), null);
         User savedUser = userRepository.save(user);
 
         return userMapper.toUserResponse(savedUser);
@@ -54,6 +57,26 @@ public class UserService {
     public User getOriginalUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    }
+
+    public User findByJwtToken(String token) throws ResourceNotFoundException {
+        token = token.substring(7);
+        String email = jwtService.extractUsername(token);
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new BadCredentialsException("User not found with email: " + email));
+        return user;
+    }
+
+    public UserResponse findByJwtTokenTest(String token) throws ResourceNotFoundException {
+        token = token.substring(7);
+        String email = jwtService.extractUsername(token);
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new BadCredentialsException("User not found with email: " + email));
+        return userMapper.toUserResponse(user);
     }
 
 }

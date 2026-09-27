@@ -18,3 +18,9 @@ spring:
 application:
   storage:
     root: './storage'
+  security:
+    jwt:
+      secret-key: b15f7819606774c89cbc1477c9dcbf149683af67ed2ca3e875718850c39330ce
+      expiration: 86400000  # a day
+      refresh-token:
+        expiration: 604800000  # 7 days
