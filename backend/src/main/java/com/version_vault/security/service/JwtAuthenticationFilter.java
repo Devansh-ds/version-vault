@@ -1,6 +1,5 @@
 package com.version_vault.security.service;
 
-import com.version_vault.security.repo.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +21,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -43,10 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-
-//            var isTokenValid = tokenRepository.findByToken(jwtToken)
-//                    .map(token -> !token.isExpired() && !token.isRevoked())
-//                    .orElse(false);
 
             if (jwtService.validateToken(jwtToken, userDetails) ) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

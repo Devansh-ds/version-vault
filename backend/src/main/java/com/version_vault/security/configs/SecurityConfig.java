@@ -34,8 +34,6 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**")
                                 .permitAll()
 
-//                                .requestMatchers("/test/user/**").hasRole(Role.USER.name())
-
                                 .anyRequest()
                                 .authenticated()
 

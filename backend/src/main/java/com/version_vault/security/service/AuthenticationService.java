@@ -37,24 +37,11 @@ public class AuthenticationService {
             throw new ResourceAlreadyExistsException("Email/Username already in use");
         }
 
-        var savedUser = userRepository.save(user);
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
         return new AuthenticationResponse(jwtToken, refreshToken);
     }
-
-//    private void revokeAllUserTokens(User user) {
-//        var validToken = tokenRepository.findAllValidTokensByUser(user.getId());
-//        if (validToken.isEmpty()) {
-//            return;
-//        }
-//        validToken.forEach(token -> {
-//            token.setExpired(true);
-//            token.setRevoked(true);
-//        });
-//        tokenRepository.saveAll(validToken);
-//    }
-
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws ResourceNotFoundException {
 
@@ -71,49 +58,6 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
-//        revokeAllUserTokens(user);
-//        saveUserToken(user, jwtToken);
-
         return new AuthenticationResponse(jwtToken, refreshToken);
     }
-
-//    private void saveUserToken(User savedUser, String jwtToken) {
-//        var token = new Token(
-//                jwtToken,
-//                TokenType.BEARER,
-//                false,
-//                false,
-//                savedUser
-//        );
-//        tokenRepository.save(token);
-//    }
-
-//    public AuthenticationResponse refreshToken(String refreshToken) throws TokenInvalidException {
-//
-//        String userEmail;
-//
-//        if (refreshToken == null || !refreshToken.startsWith("Bearer ")) {
-//            throw new TokenInvalidException("token might be null or empty");
-//        }
-//
-//        refreshToken = refreshToken.substring(7);
-//        userEmail = jwtService.extractUsername(refreshToken);
-//
-//        if (userEmail != null) {
-//            var user = userRepository.findByEmail(userEmail)
-//                    .orElseThrow(() -> new UsernameNotFoundException(userEmail));
-//
-//            if (jwtService.validateToken(refreshToken, user)) {
-//                var accessToken = jwtService.generateToken(user);
-//                revokeAllUserTokens(user);
-//                saveUserToken(user, accessToken);
-//
-//                return new AuthenticationResponse(accessToken, refreshToken);
-//            } else {
-//                throw new TokenInvalidException("refresh token is invalid");
-//            }
-//        } else {
-//            throw new TokenInvalidException("Weird refresh token");
-//        }
-//    }
 }
