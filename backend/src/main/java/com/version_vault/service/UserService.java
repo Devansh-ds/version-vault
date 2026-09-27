@@ -22,20 +22,6 @@ public class UserService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
 
-    public UserResponse createUser(CreateUserRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new ResourceAlreadyExistsException("Username already exists: "  + request.getUsername());
-        }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ResourceAlreadyExistsException("Email already exists: "  + request.getEmail());
-        }
-
-        User user = new User(request.getUsername(), request.getEmail(), null);
-        User savedUser = userRepository.save(user);
-
-        return userMapper.toUserResponse(savedUser);
-    }
-
     public UserResponse getUserById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));

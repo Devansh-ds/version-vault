@@ -1,0 +1,9 @@
+package com.version_vault.exceptions;
+
+public class UnauthorizedException extends RuntimeException {
+    public UnauthorizedException(String message) {
+        super(message);
+    }
+    public UnauthorizedException() {
+    }
+}

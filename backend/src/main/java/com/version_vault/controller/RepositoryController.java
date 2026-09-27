@@ -1,8 +1,10 @@
 package com.version_vault.controller;
 
+import com.version_vault.models.User;
 import com.version_vault.request.CreateRepositoryRequest;
 import com.version_vault.response.RepositoryResponse;
 import com.version_vault.service.RepositoryService;
+import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,13 @@ import java.util.UUID;
 public class RepositoryController {
 
     private final RepositoryService repositoryService;
+    private final UserService userService;
 
-    @PostMapping("/user/{userId}")
+    @PostMapping
     public ResponseEntity<RepositoryResponse> createRepository(@RequestBody @Valid CreateRepositoryRequest request,
-                                                               @PathVariable UUID userId) {
-        return new ResponseEntity<>(repositoryService.createRepository(request, userId), HttpStatus.CREATED);
+                                                               @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return new ResponseEntity<>(repositoryService.createRepository(request, owner), HttpStatus.CREATED);
     }
 
     @GetMapping("/{repoId}")
@@ -30,15 +34,17 @@ public class RepositoryController {
         return ResponseEntity.ok(repositoryService.getRepositoryById(repoId));
     }
 
-    @GetMapping("/user/{userId}/all")
-    public ResponseEntity<List<RepositoryResponse>> getAllRepositoryByUserId(@PathVariable UUID userId) {
-        return ResponseEntity.ok(repositoryService.getRepositoryByOwner(userId));
+    @GetMapping("/all")
+    public ResponseEntity<List<RepositoryResponse>> getAllRepositoryByUserId(@RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return ResponseEntity.ok(repositoryService.getRepositoryByOwner(owner));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<RepositoryResponse> getRepositoryByOwnerAndName(@PathVariable UUID userId,
-                                                                          @RequestParam String name) {
-        return ResponseEntity.ok(repositoryService.getRepositoryByOwnerAndName(userId, name));
+    @GetMapping("/name/{name}")
+    public ResponseEntity<RepositoryResponse> getRepositoryByOwnerAndName(@RequestHeader("Authorization") String token,
+                                                                          @PathVariable String name) {
+        User owner = userService.findByJwtToken(token);
+        return ResponseEntity.ok(repositoryService.getRepositoryByOwnerAndName(owner, name));
     }
 
 }

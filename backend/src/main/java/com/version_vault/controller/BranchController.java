@@ -1,8 +1,10 @@
 package com.version_vault.controller;
 
+import com.version_vault.models.User;
 import com.version_vault.request.CreateBranchRequest;
 import com.version_vault.response.BranchResponse;
 import com.version_vault.service.BranchService;
+import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,14 @@ import java.util.UUID;
 public class BranchController {
 
     private final BranchService branchService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<BranchResponse> createBranch(@RequestBody @Valid CreateBranchRequest request,
-                                                       @PathVariable UUID repoId) {
-        return new ResponseEntity<>(branchService.createBranch(request, repoId), HttpStatus.CREATED);
+                                                       @PathVariable UUID repoId,
+                                                       @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return new ResponseEntity<>(branchService.createBranch(request, repoId, owner), HttpStatus.CREATED);
     }
 
     @GetMapping("/{branchId}")

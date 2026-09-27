@@ -1,8 +1,10 @@
 package com.version_vault.controller;
 
+import com.version_vault.models.User;
 import com.version_vault.request.CreateCommitRequest;
 import com.version_vault.response.CommitResponse;
 import com.version_vault.service.CommitService;
+import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,14 @@ import java.util.UUID;
 public class CommitController {
 
     private final CommitService commitService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<CommitResponse> createCommit(@RequestBody @Valid CreateCommitRequest request,
-                                                       @PathVariable UUID branchId) {
-        return new ResponseEntity<>(commitService.createCommit(request,branchId), HttpStatus.CREATED);
+                                                       @PathVariable UUID branchId,
+                                                       @RequestHeader("Authorization") String token) {
+        User author = userService.findByJwtToken(token);
+        return new ResponseEntity<>(commitService.createCommit(request, branchId, author), HttpStatus.CREATED);
     }
 
     @GetMapping("/{commitId}")

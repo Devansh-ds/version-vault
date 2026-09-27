@@ -1,6 +1,7 @@
 package com.version_vault.service;
 
 import com.version_vault.exceptions.ResourceNotFoundException;
+import com.version_vault.exceptions.UnauthorizedException;
 import com.version_vault.mapper.CommitMapper;
 import com.version_vault.models.Branch;
 import com.version_vault.models.Commit;
@@ -29,18 +30,21 @@ public class CommitService {
     private final CommitMapper commitMapper;
 
     @Transactional
-    public CommitResponse createCommit(CreateCommitRequest request, UUID branchId) {
+    public CommitResponse createCommit(CreateCommitRequest request, UUID branchId, User author) {
 
         // Find branch existence
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
 
+        if (!branch.getRepository().getOwner().getId().equals(author.getId())) {
+            throw new UnauthorizedException("You doesn't own this repository to create a commit");
+        }
+
         // capture current head
         Commit parentCommit = branch.getHeadCommit();
 
         // Find author/owner
-        User author = userRepository.findById(request.authorId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + request.authorId()));
+        // provided by jwt
 
         // create snapshot of current working tree
         Manifest manifest = manifestService.createManifestEntity(branchId);

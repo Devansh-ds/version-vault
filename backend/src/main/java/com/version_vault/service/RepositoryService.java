@@ -25,14 +25,14 @@ public class RepositoryService {
     private final RepositoryMapper repositoryMapper;
 
     @Transactional
-    public RepositoryResponse createRepository(CreateRepositoryRequest request, UUID ownerId) {
+    public RepositoryResponse createRepository(CreateRepositoryRequest request, User owner) {
 
         // get User for the repo and validate it exists
-        User owner = userService.getOriginalUserById(ownerId);
+        // validated at controller and security
 
         // check owner + name doesn't already exist
-        if (repositoryRepository.existsByOwnerIdAndName(ownerId, request.getName())) {
-            throw new ResourceAlreadyExistsException("Repository with name " + request.getName() + " already exists for owner id " + ownerId);
+        if (repositoryRepository.existsByOwnerIdAndName(owner.getId(), request.getName())) {
+            throw new ResourceAlreadyExistsException("Repository with name " + request.getName() + " already exists for owner id " + owner.getId());
         }
 
         // create repo
@@ -58,18 +58,17 @@ public class RepositoryService {
     }
 
     @Transactional(readOnly = true)
-    public RepositoryResponse getRepositoryByOwnerAndName(UUID ownerId, String name) {
-        Repository repository = repositoryRepository.findByOwnerIdAndName(ownerId, name)
-                .orElseThrow(() -> new ResourceNotFoundException("Repository with name " + name + " not found for owner id " + ownerId));
+    public RepositoryResponse getRepositoryByOwnerAndName(User owner, String name) {
+        Repository repository = repositoryRepository.findByOwnerIdAndName(owner.getId(), name)
+                .orElseThrow(() -> new ResourceNotFoundException("Repository with name " + name + " not found for owner id " + owner.getId()));
         User user = userService.getOriginalUserById(repository.getOwner().getId());
 
         return repositoryMapper.toRepositoryResponse(repository, user);
     }
 
     @Transactional(readOnly = true)
-    public List<RepositoryResponse> getRepositoryByOwner(UUID ownerId) {
-        User owner = userService.getOriginalUserById(ownerId);
-        List<Repository> repos = repositoryRepository.findAllByOwnerId(ownerId);
+    public List<RepositoryResponse> getRepositoryByOwner(User owner) {
+        List<Repository> repos = repositoryRepository.findAllByOwnerId(owner.getId());
 
         return repos.stream()
                 .map(repo -> repositoryMapper.toRepositoryResponse(repo, owner))

@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler(TokenInvalidException.class)
-    public ResponseEntity<String> handleTokenInvalidException(TokenInvalidException ex ) {
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handleTokenInvalidException(UnauthorizedException ex ) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(ex.getMessage());

@@ -2,10 +2,12 @@ package com.version_vault.service;
 
 import com.version_vault.exceptions.ResourceAlreadyExistsException;
 import com.version_vault.exceptions.ResourceNotFoundException;
+import com.version_vault.exceptions.UnauthorizedException;
 import com.version_vault.mapper.BranchMapper;
 import com.version_vault.models.Branch;
 import com.version_vault.models.Commit;
 import com.version_vault.models.Repository;
+import com.version_vault.models.User;
 import com.version_vault.repo.BranchRepository;
 import com.version_vault.repo.CommitRepository;
 import com.version_vault.repo.RepositoryRepository;
@@ -34,11 +36,16 @@ public class BranchService {
     }
 
     @Transactional
-    public BranchResponse createBranch(CreateBranchRequest request, UUID repositoryId) {
+    public BranchResponse createBranch(CreateBranchRequest request, UUID repositoryId, User owner) {
 
         // verify repo exist
         Repository repository = repositoryRepository.findById(repositoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Repository with id " + repositoryId + " not found"));
+
+        // check if owner owns the repo
+        if (!repository.getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not the owner of this repository");
+        }
 
         // verify repo name + branch name is unique
         if (branchRepository.existsByRepositoryIdAndName(repositoryId, request.getName())) {

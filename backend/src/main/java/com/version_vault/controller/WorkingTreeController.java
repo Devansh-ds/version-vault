@@ -1,6 +1,8 @@
 package com.version_vault.controller;
 
+import com.version_vault.models.User;
 import com.version_vault.response.WorkingEntryResponse;
+import com.version_vault.service.UserService;
 import com.version_vault.service.WorkingTreeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +19,22 @@ import java.util.UUID;
 public class WorkingTreeController {
 
     private final WorkingTreeService workingTreeService;
+    private final UserService userService;
 
     @PutMapping("/{*path}")
     public ResponseEntity<WorkingEntryResponse> addOrUpdateFile(@PathVariable UUID branchId,
                                                                 @PathVariable String path,
-                                                                @RequestParam("file")MultipartFile file
+                                                                @RequestParam("file")MultipartFile file,
+                                                                @RequestHeader("Authorization") String token
     ) throws IOException {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         path = normalizePath(path);
+        User owner = userService.findByJwtToken(token);
 
-        WorkingEntryResponse response = workingTreeService.addOrUpdateFile(branchId, path, file.getBytes());
+        WorkingEntryResponse response = workingTreeService.addOrUpdateFile(branchId, path, file.getBytes(), owner);
         return ResponseEntity.ok(response);
     }
 
@@ -50,10 +55,14 @@ public class WorkingTreeController {
     }
 
     @DeleteMapping("/{*path}")
-    public ResponseEntity<Void> deleteFile(@PathVariable UUID branchId, @PathVariable String path) {
+    public ResponseEntity<Void> deleteFile(@PathVariable UUID branchId,
+                                           @PathVariable String path,
+                                           @RequestHeader("Authorization") String token) {
         path = normalizePath(path);
 
-        workingTreeService.deleteFile(branchId, path);
+        User owner = userService.findByJwtToken(token);
+        workingTreeService.deleteFile(branchId, path, owner);
+
         return ResponseEntity.noContent().build();
     }
 

@@ -1,11 +1,9 @@
 package com.version_vault.service;
 
 import com.version_vault.exceptions.ResourceNotFoundException;
+import com.version_vault.exceptions.UnauthorizedException;
 import com.version_vault.mapper.WorkingEntryMapper;
-import com.version_vault.models.Branch;
-import com.version_vault.models.ManifestEntry;
-import com.version_vault.models.ObjectEntity;
-import com.version_vault.models.WorkingEntry;
+import com.version_vault.models.*;
 import com.version_vault.repo.BranchRepository;
 import com.version_vault.repo.ManifestEntryRepository;
 import com.version_vault.repo.WorkingEntryRepository;
@@ -29,7 +27,7 @@ public class WorkingTreeService {
     private final ManifestEntryRepository manifestEntryRepository;
 
     @Transactional
-    public WorkingEntryResponse addOrUpdateFile(UUID branchId, String path, byte[] content) {
+    public WorkingEntryResponse addOrUpdateFile(UUID branchId, String path, byte[] content, User owner) {
 
         // validate path
         validatePath(path);
@@ -37,6 +35,11 @@ public class WorkingTreeService {
         // check if branch exist or not
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
+
+        // check if user owns the branch
+        if (!branch.getRepository().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not allowed to make changes in this branch");
+        }
 
         // store content and get Object
         ObjectEntity objectEntity = objectService.store(content);
@@ -84,8 +87,15 @@ public class WorkingTreeService {
     }
 
     @Transactional
-    public void deleteFile(UUID branchId, String path) {
+    public void deleteFile(UUID branchId, String path, User owner) {
         validatePath(path);
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
+
+        if (!branch.getRepository().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not allowed to make changes in this branch");
+        }
 
         WorkingEntry entry = workingEntryRepository.findByBranchIdAndPath(branchId, path)
                         .orElseThrow(() -> new ResourceNotFoundException("File not found: " + path));
@@ -97,10 +107,6 @@ public class WorkingTreeService {
         if (path == null || path.isBlank()) {
             throw new IllegalArgumentException("Path cannot be empty");
         }
-
-//        if (path.startsWith("/")) {
-//            throw new IllegalArgumentException("Path cannot start with '/'");
-//        }
 
         if (path.contains("\\")) {
             throw new IllegalArgumentException("Path must use '/' as separator");

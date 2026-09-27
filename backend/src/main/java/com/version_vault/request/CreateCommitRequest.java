@@ -8,9 +8,6 @@ import java.util.UUID;
 
 public record CreateCommitRequest(
 
-        @NotNull
-        UUID authorId,
-
         @NotBlank
         @Size(min = 1, max = 500)
         String message
