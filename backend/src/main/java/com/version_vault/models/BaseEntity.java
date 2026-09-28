@@ -27,6 +27,4 @@ public abstract class BaseEntity {
         this.id = id;
         this.createdAt = createdAt;
     }
-
-
 }

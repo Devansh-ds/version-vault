@@ -1,5 +1,6 @@
 package com.version_vault.service;
 
+import com.version_vault.dtos.request.RenameBranchRequest;
 import com.version_vault.exceptions.ResourceAlreadyExistsException;
 import com.version_vault.exceptions.ResourceNotFoundException;
 import com.version_vault.exceptions.UnauthorizedException;
@@ -39,8 +40,7 @@ public class BranchService {
     public BranchResponse createBranch(CreateBranchRequest request, UUID repositoryId, User owner) {
 
         // verify repo exist
-        Repository repository = repositoryRepository.findById(repositoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Repository with id " + repositoryId + " not found"));
+        Repository repository = getRepositoryById(repositoryId);
 
         // check if the owner owns the repo
         if (!repository.getOwner().getId().equals(owner.getId())) {
@@ -81,8 +81,15 @@ public class BranchService {
     @Transactional(readOnly = true)
     public BranchResponse getBranchByRepositoryAndName(
             UUID repositoryId,
-            String name
+            String name,
+            User owner
     ) {
+        Repository repository = getRepositoryById(repositoryId);
+
+        if (!repository.getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not the owner of this repository");
+        }
+
         Branch branch = branchRepository
                 .findByRepositoryIdAndName(repositoryId, name)
                 .orElseThrow(() ->
@@ -109,4 +116,76 @@ public class BranchService {
                 .toList();
     }
 
+    @Transactional
+    public BranchResponse renameBranch(UUID repoId, UUID branchId, RenameBranchRequest request, User owner) {
+
+        Repository repository = getRepositoryById(repoId);
+
+        if (!repository.getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not the owner of this repository");
+        }
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id: " + branchId));
+
+        if (!branch.getRepository().getId().equals(repository.getId())) {
+            throw new UnauthorizedException("Branch does not belong to this repository");
+        }
+
+        String newName = request.name().trim();
+
+        if (branch.getName().equals("main")) {
+            throw new IllegalArgumentException("'Main' Branch cannot be renamed");
+        }
+        if (branch.getName().equals(newName)) {
+            return branchMapper.toBranchResponse(branch);
+        }
+        if (branchRepository.existsByRepositoryIdAndName(repoId, newName)) {
+            throw new ResourceAlreadyExistsException("Branch with name " + newName + " already exists in repo with id " + repoId);
+        }
+
+        branch.setName(newName);
+        return branchMapper.toBranchResponse(branchRepository.save(branch));
+    }
+
+    @Transactional
+    public void deleteBranch(UUID repoId, UUID branchId, User owner) {
+        Repository repository = getRepositoryById(repoId);
+
+        if (!repository.getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not the owner of this repository");
+        }
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id: " + branchId));
+
+        if (!branch.getRepository().getId().equals(repository.getId())) {
+            throw new UnauthorizedException("Branch does not belong to this repository");
+        }
+
+        if (branch.getName().equals("main")) {
+            throw new IllegalArgumentException("'Main' Branch cannot be deleted");
+        }
+
+        branchRepository.delete(branch);
+    }
+
+    private Repository getRepositoryById(UUID repoId) {
+        return repositoryRepository.findById(repoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Repository with id " + repoId + " not found"));
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

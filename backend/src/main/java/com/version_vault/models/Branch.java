@@ -35,7 +35,7 @@ public class Branch extends BaseEntity {
     )
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY,  optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "head_commit_id",
             foreignKey = @ForeignKey(name = "fk_branches_head_commit")

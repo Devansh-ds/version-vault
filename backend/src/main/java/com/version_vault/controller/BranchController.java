@@ -1,5 +1,6 @@
 package com.version_vault.controller;
 
+import com.version_vault.dtos.request.RenameBranchRequest;
 import com.version_vault.models.User;
 import com.version_vault.dtos.request.CreateBranchRequest;
 import com.version_vault.dtos.response.BranchResponse;
@@ -38,13 +39,33 @@ public class BranchController {
 
     @GetMapping
     public ResponseEntity<BranchResponse> getByRepoIdAndName(@PathVariable UUID repoId,
-                                                             @RequestParam String branchName) {
-        return ResponseEntity.ok(branchService.getBranchByRepositoryAndName(repoId, branchName));
+                                                             @RequestParam String branchName,
+                                                             @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return ResponseEntity.ok(branchService.getBranchByRepositoryAndName(repoId, branchName, owner));
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<BranchResponse>> getAllBranches(@PathVariable UUID repoId) {
         return ResponseEntity.ok(branchService.getBranchesByRepository(repoId));
+    }
+
+    @PutMapping("/{branchId}/rename")
+    public ResponseEntity<BranchResponse> renameBranch(@PathVariable UUID repoId,
+                                                       @PathVariable UUID branchId,
+                                                       @RequestBody @Valid RenameBranchRequest renameBranchRequest,
+                                                       @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return ResponseEntity.ok(branchService.renameBranch(repoId, branchId, renameBranchRequest, owner));
+    }
+
+    @DeleteMapping("/{branchId}")
+    public ResponseEntity<Void> deleteBranch(@PathVariable UUID repoId,
+                                             @PathVariable UUID branchId,
+                                             @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        branchService.deleteBranch(repoId, branchId, owner);
+        return ResponseEntity.noContent().build();
     }
 
 }
