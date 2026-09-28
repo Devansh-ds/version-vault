@@ -10,6 +10,7 @@ import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,4 +50,26 @@ public class CommitController {
         return ResponseEntity.ok(commitService.getFilesAtCommit(commitId));
     }
 
+    @GetMapping("/{commitId}/files/{*path}")
+    public ResponseEntity<byte[]> readFileAtCommit(@PathVariable UUID commitId, @PathVariable String path) {
+        path = normalizePath(path);
+        byte[] content = commitService.readFileAtCommit(commitId, path);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(content.length)
+                .body(content);
+    }
+
+    private String normalizePath(String path) {
+        if (path == null || path.isBlank()) {
+            throw new IllegalArgumentException("Path cannot be empty");
+        }
+
+        while (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        return path;
+    }
 }

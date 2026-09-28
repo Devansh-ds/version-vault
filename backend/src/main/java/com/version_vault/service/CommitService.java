@@ -31,6 +31,7 @@ public class CommitService {
     private final ManifestService manifestService;
     private final CommitMapper commitMapper;
     private final ManifestEntryRepository manifestEntryRepository;
+    private final ObjectService objectService;
 
     @Transactional
     public CommitResponse createCommit(CreateCommitRequest request, UUID branchId, User author) {
@@ -142,4 +143,40 @@ public class CommitService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public byte[] readFileAtCommit(UUID commitId, String path) {
+
+        validatePath(path);
+
+        Commit commit = commitRepository.findById(commitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitId));
+
+        UUID manifestId = commit.getManifest().getId();
+
+        ManifestEntry manifestEntry = manifestEntryRepository.findByManifestIdAndPath(manifestId, path)
+                .orElseThrow(() -> new ResourceNotFoundException("File not found with path " + path));
+
+        return objectService.readContent(manifestEntry.getObject().getId());
+    }
+
+    private void validatePath(String path) {
+
+        if (path == null || path.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Path cannot be empty"
+            );
+        }
+
+        if (path.contains("\\")) {
+            throw new IllegalArgumentException(
+                    "Path must use '/' as separator"
+            );
+        }
+
+        if (path.contains("..")) {
+            throw new IllegalArgumentException(
+                    "Path cannot contain '..'"
+            );
+        }
+    }
 }
