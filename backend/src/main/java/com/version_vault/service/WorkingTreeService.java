@@ -29,15 +29,15 @@ public class WorkingTreeService {
     @Transactional
     public WorkingEntryResponse addOrUpdateFile(UUID branchId, String path, byte[] content, User owner) {
 
-        // validate path
+        // validate the path
         validatePath(path);
 
-        // check if branch exist or not
+        // check if the branch exists or not
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
 
-        // check if user owns the branch
-        if (!branch.getRepository().getId().equals(owner.getId())) {
+        // check if the user owns the branch
+        if (!branch.getRepository().getOwner().getId().equals(owner.getId())) {
             throw new UnauthorizedException("You are not allowed to make changes in this branch");
         }
 
@@ -93,7 +93,7 @@ public class WorkingTreeService {
         Branch branch = branchRepository.findById(branchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
 
-        if (!branch.getRepository().getId().equals(owner.getId())) {
+        if (!branch.getRepository().getOwner().getId().equals(owner.getId())) {
             throw new UnauthorizedException("You are not allowed to make changes in this branch");
         }
 

@@ -16,11 +16,4 @@ public interface ManifestEntryRepository
             UUID manifestId,
             String path
     );
-
-    List<ManifestEntry> findAllByManifestId(UUID manifestId);
-
-    boolean existsByManifestIdAndPath(
-            UUID manifestId,
-            String path
-    );
 }
