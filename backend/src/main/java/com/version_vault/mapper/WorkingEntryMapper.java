@@ -1,9 +1,8 @@
 package com.version_vault.mapper;
 
 import com.version_vault.models.WorkingEntry;
-import com.version_vault.response.WorkingEntryResponse;
+import com.version_vault.dtos.response.WorkingEntryResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class WorkingEntryMapper {

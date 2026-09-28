@@ -2,7 +2,7 @@ package com.version_vault.security.controller;
 
 import com.version_vault.exceptions.ResourceAlreadyExistsException;
 import com.version_vault.exceptions.ResourceNotFoundException;
-import com.version_vault.response.UserResponse;
+import com.version_vault.dtos.response.UserResponse;
 import com.version_vault.security.dto.AuthenticationRequest;
 import com.version_vault.security.dto.AuthenticationResponse;
 import com.version_vault.security.dto.RegisterRequest;

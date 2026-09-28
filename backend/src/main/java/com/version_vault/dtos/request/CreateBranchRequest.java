@@ -1,4 +1,4 @@
-package com.version_vault.request;
+package com.version_vault.dtos.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,17 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserRequest {
+public class CreateBranchRequest {
 
     @NotNull
-    @Size(min = 1, max = 50)
-    private String username;
+    @Size(max = 100)
+    private String name;
 
-    @NotNull
-    @Size(min = 1, max = 255)
-    private String email;
+    private UUID headCommitId;
+
 }

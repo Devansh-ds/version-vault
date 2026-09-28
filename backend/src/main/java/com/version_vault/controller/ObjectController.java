@@ -1,8 +1,8 @@
 package com.version_vault.controller;
 
 import com.version_vault.models.ObjectEntity;
-import com.version_vault.response.ObjectContent;
-import com.version_vault.response.ObjectResponse;
+import com.version_vault.dtos.response.ObjectContent;
+import com.version_vault.dtos.response.ObjectResponse;
 import com.version_vault.service.ObjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

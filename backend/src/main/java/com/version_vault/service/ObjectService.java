@@ -3,7 +3,7 @@ package com.version_vault.service;
 import com.version_vault.exceptions.ResourceNotFoundException;
 import com.version_vault.models.ObjectEntity;
 import com.version_vault.repo.ObjectRepository;
-import com.version_vault.response.ObjectContent;
+import com.version_vault.dtos.response.ObjectContent;
 import com.version_vault.storage.ObjectStorage;
 import com.version_vault.utils.HashUtils;
 import com.version_vault.utils.StorageKeyGenerator;

@@ -1,5 +1,7 @@
 package com.version_vault.service;
 
+import com.version_vault.dtos.DiffStatus;
+import com.version_vault.dtos.response.*;
 import com.version_vault.exceptions.ResourceNotFoundException;
 import com.version_vault.exceptions.UnauthorizedException;
 import com.version_vault.mapper.CommitMapper;
@@ -7,20 +9,14 @@ import com.version_vault.models.*;
 import com.version_vault.repo.BranchRepository;
 import com.version_vault.repo.CommitRepository;
 import com.version_vault.repo.ManifestEntryRepository;
-import com.version_vault.repo.UserRepository;
-import com.version_vault.request.CreateCommitRequest;
-import com.version_vault.response.CommitHistoryResponse;
-import com.version_vault.response.CommitResponse;
-import com.version_vault.response.HistoricalFileResponse;
+import com.version_vault.dtos.request.CreateCommitRequest;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.spi.Limit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -157,6 +153,119 @@ public class CommitService {
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with path " + path));
 
         return objectService.readContent(manifestEntry.getObject().getId());
+    }
+
+    @Transactional(readOnly = true)
+    public CommitDiffResponse getDiff(UUID commitId) {
+        Commit commit = commitRepository.findById(commitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitId));
+
+        // current commit's manifest
+        UUID currentManifestId = commit.getManifest().getId();
+
+        List<ManifestEntry> currentEntries = manifestEntryRepository.findAllByManifestIdOrderByPathAsc(currentManifestId);
+
+        /* Initial commit:
+         *
+         * There is no parent snapshot, so we can't get the diff.
+         * Hence, All the files are considered as ADDED
+         * */
+        if (commit.getParentCommit() == null) {
+            List<FileDiffResponse> changes = currentEntries.stream()
+                    .map(entry -> new FileDiffResponse(
+                            entry.getPath(),
+                            DiffStatus.ADDED,
+                            null,
+                            entry.getObject().getId()
+                    )).toList();
+
+            return new CommitDiffResponse(
+                    commit.getId(),
+                    null,
+                    changes
+            );
+        }
+
+        // parent commit
+        Commit parentCommit = commit.getParentCommit();
+        UUID parentManifestId = parentCommit.getManifest().getId();
+
+        List<ManifestEntry> parentEntries = manifestEntryRepository.findAllByManifestIdOrderByPathAsc(parentManifestId);
+
+        // Convert both manifests into: path -> ManifestEntry
+        Map<String, ManifestEntry> oldFiles = parentEntries.stream()
+                .collect(Collectors.toMap(
+                                ManifestEntry::getPath,
+                                Function.identity()
+                        ));
+
+        Map<String, ManifestEntry> newFile = currentEntries.stream()
+                .collect(Collectors.toMap(
+                        ManifestEntry::getPath,
+                        Function.identity()
+                ));
+
+        // union of all paths appearing in either snapshot
+        Set<String> allPaths = new HashSet<>();
+
+        allPaths.addAll(oldFiles.keySet());
+        allPaths.addAll(newFile.keySet());
+
+        List<FileDiffResponse> changes = new ArrayList<>();
+
+        for (String path : allPaths) {
+            ManifestEntry oldEntry = oldFiles.get(path);
+            ManifestEntry newEntry = newFile.get(path);
+
+            // the file was added
+            if (oldEntry == null) {
+                changes.add(new FileDiffResponse(
+                        path,
+                        DiffStatus.ADDED,
+                        null,
+                        newEntry.getObject().getId()
+                ));
+                continue;
+            }
+
+            // the file was deleted
+            if (newEntry == null) {
+                changes.add(new FileDiffResponse(
+                        path,
+                        DiffStatus.DELETED,
+                        oldEntry.getObject().getId(),
+                        null
+                ));
+                continue;
+            }
+
+            /*
+             * File exists in both commits.
+             *
+             * Same content hash -> unchanged.
+             * Different content hash -> modified.
+             */
+            String oldContentHash = oldEntry.getObject().getContentHash();
+            String newContentHash = newEntry.getObject().getContentHash();
+
+            if (!oldContentHash.equals(newContentHash)) {
+                changes.add(new FileDiffResponse(
+                        path,
+                        DiffStatus.MODIFIED,
+                        oldEntry.getObject().getId(),
+                        newEntry.getObject().getId()
+                ));
+            }
+        }
+
+        // making response deterministic
+        changes.sort(Comparator.comparing(FileDiffResponse::path));
+
+        return new CommitDiffResponse(
+                commit.getId(),
+                parentCommit.getId(),
+                changes
+        );
     }
 
     private void validatePath(String path) {

@@ -10,7 +10,7 @@ import com.version_vault.repo.BranchRepository;
 import com.version_vault.repo.ManifestEntryRepository;
 import com.version_vault.repo.ManifestRepository;
 import com.version_vault.repo.WorkingEntryRepository;
-import com.version_vault.response.ManifestResponse;
+import com.version_vault.dtos.response.ManifestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

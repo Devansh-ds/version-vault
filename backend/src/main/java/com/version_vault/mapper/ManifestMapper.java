@@ -2,8 +2,8 @@ package com.version_vault.mapper;
 
 import com.version_vault.models.Manifest;
 import com.version_vault.models.ManifestEntry;
-import com.version_vault.response.ManifestEntryResponse;
-import com.version_vault.response.ManifestResponse;
+import com.version_vault.dtos.response.ManifestEntryResponse;
+import com.version_vault.dtos.response.ManifestResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

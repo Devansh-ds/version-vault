@@ -1,13 +1,11 @@
 package com.version_vault.controller;
 
-import com.version_vault.response.UserResponse;
+import com.version_vault.dtos.response.UserResponse;
 import com.version_vault.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")

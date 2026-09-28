@@ -1,12 +1,10 @@
 package com.version_vault.service;
 
-import com.version_vault.exceptions.ResourceAlreadyExistsException;
 import com.version_vault.exceptions.ResourceNotFoundException;
 import com.version_vault.mapper.UserMapper;
 import com.version_vault.models.User;
 import com.version_vault.repo.UserRepository;
-import com.version_vault.request.CreateUserRequest;
-import com.version_vault.response.UserResponse;
+import com.version_vault.dtos.response.UserResponse;
 import com.version_vault.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;

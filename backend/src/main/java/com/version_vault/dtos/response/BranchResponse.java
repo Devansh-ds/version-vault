@@ -1,4 +1,4 @@
-package com.version_vault.response;
+package com.version_vault.dtos.response;
 
 import lombok.Builder;
 

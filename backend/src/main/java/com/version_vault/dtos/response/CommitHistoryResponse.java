@@ -1,4 +1,4 @@
-package com.version_vault.response;
+package com.version_vault.dtos.response;
 
 import java.util.List;
 import java.util.UUID;

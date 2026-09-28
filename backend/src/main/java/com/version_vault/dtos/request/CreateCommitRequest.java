@@ -1,4 +1,4 @@
-package com.version_vault.request;
+package com.version_vault.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -2,10 +2,9 @@ package com.version_vault.mapper;
 
 import com.version_vault.models.Repository;
 import com.version_vault.models.User;
-import com.version_vault.response.RepositoryResponse;
+import com.version_vault.dtos.response.RepositoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @RequiredArgsConstructor

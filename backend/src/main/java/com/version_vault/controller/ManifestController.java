@@ -1,6 +1,6 @@
 package com.version_vault.controller;
 
-import com.version_vault.response.ManifestResponse;
+import com.version_vault.dtos.response.ManifestResponse;
 import com.version_vault.service.ManifestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

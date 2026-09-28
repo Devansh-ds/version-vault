@@ -1,10 +1,11 @@
 package com.version_vault.controller;
 
+import com.version_vault.dtos.response.CommitDiffResponse;
 import com.version_vault.models.User;
-import com.version_vault.request.CreateCommitRequest;
-import com.version_vault.response.CommitHistoryResponse;
-import com.version_vault.response.CommitResponse;
-import com.version_vault.response.HistoricalFileResponse;
+import com.version_vault.dtos.request.CreateCommitRequest;
+import com.version_vault.dtos.response.CommitHistoryResponse;
+import com.version_vault.dtos.response.CommitResponse;
+import com.version_vault.dtos.response.HistoricalFileResponse;
 import com.version_vault.service.CommitService;
 import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
@@ -59,6 +60,11 @@ public class CommitController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(content.length)
                 .body(content);
+    }
+
+    @GetMapping("/{commitId}/diff")
+    public ResponseEntity<CommitDiffResponse> getCommitDiff(@PathVariable UUID commitId) {
+        return ResponseEntity.ok(commitService.getDiff(commitId));
     }
 
     private String normalizePath(String path) {

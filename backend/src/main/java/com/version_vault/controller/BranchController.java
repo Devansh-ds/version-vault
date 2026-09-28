@@ -1,8 +1,8 @@
 package com.version_vault.controller;
 
 import com.version_vault.models.User;
-import com.version_vault.request.CreateBranchRequest;
-import com.version_vault.response.BranchResponse;
+import com.version_vault.dtos.request.CreateBranchRequest;
+import com.version_vault.dtos.response.BranchResponse;
 import com.version_vault.service.BranchService;
 import com.version_vault.service.UserService;
 import jakarta.validation.Valid;

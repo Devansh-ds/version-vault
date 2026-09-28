@@ -9,16 +9,5 @@ import java.util.UUID;
 
 public interface CommitRepository extends JpaRepository<Commit, UUID> {
 
-    List<Commit> findAllByRepositoryIdOrderByCreatedAtDesc(
-            UUID repositoryId
-    );
-
-    List<Commit> findAllByParentCommitId(UUID parentCommitId);
-
-    boolean existsByIdAndRepositoryId(
-            UUID commitId,
-            UUID repositoryId
-    );
-
     Optional<Commit> findByIdAndRepositoryId(UUID headCommitId, UUID repositoryId);
 }

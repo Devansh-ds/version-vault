@@ -1,7 +1,7 @@
 package com.version_vault.controller;
 
 import com.version_vault.models.User;
-import com.version_vault.response.WorkingEntryResponse;
+import com.version_vault.dtos.response.WorkingEntryResponse;
 import com.version_vault.service.UserService;
 import com.version_vault.service.WorkingTreeService;
 import lombok.RequiredArgsConstructor;

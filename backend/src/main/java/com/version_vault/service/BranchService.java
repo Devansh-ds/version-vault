@@ -11,8 +11,8 @@ import com.version_vault.models.User;
 import com.version_vault.repo.BranchRepository;
 import com.version_vault.repo.CommitRepository;
 import com.version_vault.repo.RepositoryRepository;
-import com.version_vault.request.CreateBranchRequest;
-import com.version_vault.response.BranchResponse;
+import com.version_vault.dtos.request.CreateBranchRequest;
+import com.version_vault.dtos.response.BranchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,7 @@ public class BranchService {
         Repository repository = repositoryRepository.findById(repositoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Repository with id " + repositoryId + " not found"));
 
-        // check if owner owns the repo
+        // check if the owner owns the repo
         if (!repository.getOwner().getId().equals(owner.getId())) {
             throw new UnauthorizedException("You are not the owner of this repository");
         }
@@ -53,18 +53,18 @@ public class BranchService {
                     + " already exists for repository with id " + repositoryId);
         }
 
-        // verify source commit belongs to the repo
+        // verify the source commit belongs to the repo
         Commit sourceCommit = commitRepository.findByIdAndRepositoryId(request.getHeadCommitId(), repositoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Source commit with id " + request.getHeadCommitId()
                         + " not found for repository with id " + repositoryId));
 
-        // create branch with head being source commit
+        // create a branch with head being the source commit
         Branch branch = new Branch(repository, request.getName(), sourceCommit);
 
         // save
         Branch savedBranch = branchRepository.save(branch);
 
-        // initialize working tree of new branch from commit's manifest
+        // initialize a working tree of the new branch from the commit's manifest
         workingTreeService.initializeFromManifestOfCommit(savedBranch.getId(), sourceCommit.getManifest().getId());
 
         return branchMapper.toBranchResponse(savedBranch);

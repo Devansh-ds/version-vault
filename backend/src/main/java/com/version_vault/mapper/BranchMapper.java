@@ -1,11 +1,9 @@
 package com.version_vault.mapper;
 
 import com.version_vault.models.Branch;
-import com.version_vault.response.BranchResponse;
-import jakarta.persistence.ManyToOne;
+import com.version_vault.dtos.response.BranchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @RequiredArgsConstructor

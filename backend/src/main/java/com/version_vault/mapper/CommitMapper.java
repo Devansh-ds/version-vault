@@ -1,7 +1,7 @@
 package com.version_vault.mapper;
 
 import com.version_vault.models.Commit;
-import com.version_vault.response.CommitResponse;
+import com.version_vault.dtos.response.CommitResponse;
 import org.springframework.stereotype.Component;
 
 @Component
