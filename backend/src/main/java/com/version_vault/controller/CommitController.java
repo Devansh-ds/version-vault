@@ -1,11 +1,8 @@
 package com.version_vault.controller;
 
-import com.version_vault.dtos.response.CommitDiffResponse;
+import com.version_vault.dtos.response.*;
 import com.version_vault.models.User;
 import com.version_vault.dtos.request.CreateCommitRequest;
-import com.version_vault.dtos.response.CommitHistoryResponse;
-import com.version_vault.dtos.response.CommitResponse;
-import com.version_vault.dtos.response.HistoricalFileResponse;
 import com.version_vault.service.CommitService;
 import com.version_vault.service.UserService;
 import jakarta.validation.Valid;
@@ -77,5 +74,13 @@ public class CommitController {
         }
 
         return path;
+    }
+
+    @GetMapping("/{commitAId}/merge-base/{commitBId}")
+    public ResponseEntity<MergeBaseResponse> findMergeBase(@PathVariable UUID commitAId,
+                                                           @PathVariable UUID commitBId,
+                                                           @RequestHeader("Authorization") String token) {
+        User owner = userService.findByJwtToken(token);
+        return ResponseEntity.ok(commitService.findMergeBase(commitAId, commitBId, owner));
     }
 }

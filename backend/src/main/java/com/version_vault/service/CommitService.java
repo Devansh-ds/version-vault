@@ -268,6 +268,61 @@ public class CommitService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public MergeBaseResponse findMergeBase(UUID commitAId, UUID commitBId, User owner) {
+        Commit commitA = commitRepository.findById(commitAId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitAId));
+        Commit commitB = commitRepository.findById(commitBId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitBId));
+
+        if (!commitA.getRepository().getId().equals(commitB.getRepository().getId())) {
+            throw new ResourceNotFoundException("Commits do not belong to the same repository");
+        }
+
+        if (!commitA.getRepository().getOwner().getId().equals(owner.getId())) {
+            throw new UnauthorizedException("You are not the owner of this repository");
+        }
+
+        Set<UUID> commitBAncestors = collectAncestors(commitBId);
+        Commit current = commitA;
+
+        while (current != null) {
+            if (commitBAncestors.contains(current.getId())) {
+                return new MergeBaseResponse(
+                        commitAId,
+                        commitBId,
+                        current.getId()
+                );
+            }
+            current = current.getParentCommit();
+        }
+
+        return new MergeBaseResponse(
+                commitAId,
+                commitBId,
+                null
+        );
+    }
+
+    /**
+    * c1 -> c2 -> c3 -> null: Now c3 will have {c3, c2, c1} as ancestors
+    * @c1 -> null: Now c1 will have {c1} as ancestor
+    * */
+    private Set<UUID> collectAncestors(UUID commitId) {
+
+        Set<UUID> ancestors = new HashSet<>();
+
+        Commit current = commitRepository.findById(commitId)
+                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitId));
+
+        while (current != null) {
+            ancestors.add(current.getId());
+            current = current.getParentCommit();
+        }
+
+        return ancestors;
+    }
+
     private void validatePath(String path) {
 
         if (path == null || path.isBlank()) {
