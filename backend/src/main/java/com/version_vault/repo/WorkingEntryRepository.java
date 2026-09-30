@@ -23,4 +23,6 @@ public interface WorkingEntryRepository extends JpaRepository<WorkingEntry, UUID
 """)
     void deleteAllByBranchId(@Param("branchId") UUID branchId);
 
+    boolean existsByObjectId(UUID objectId);
+
 }

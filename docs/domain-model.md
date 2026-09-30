@@ -33,4 +33,4 @@
 17. Branch head updates must use optimistic concurrency control.
 
 18. An object becomes eligible for garbage collection only when it is no
-    longer reachable from retained repository state.
+    longer reachable from the retained repository state.
