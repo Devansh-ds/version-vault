@@ -12,6 +12,7 @@ public class CommitMapper {
                 commit.getId(),
                 commit.getRepository().getId(),
                 commit.getParentCommit() != null? commit.getParentCommit().getId(): null,
+                commit.getSecondParentCommit() != null? commit.getSecondParentCommit().getId(): null,
                 commit.getManifest().getId(),
                 commit.getAuthor().getId(),
                 commit.getMessage(),

@@ -7,6 +7,7 @@ public record CommitResponse(
         UUID id,
         UUID repositoryId,
         UUID parentCommitId,
+        UUID secondParentCommitId,
         UUID manifestId,
         UUID authorId,
         String message,

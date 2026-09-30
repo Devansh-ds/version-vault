@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -143,5 +145,58 @@ public class WorkingTreeService {
 
         // Save working tree entries
         workingEntryRepository.saveAll(workingEntries);
+    }
+
+    @Transactional
+    public void replaceWithManifest(UUID branchId, UUID manifestId) {
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Branch not found with id " + branchId
+                        )
+                );
+
+        List<ManifestEntry> manifestEntries =
+                manifestEntryRepository
+                        .findAllByManifestIdOrderByPathAsc(manifestId);
+
+        workingEntryRepository.deleteAllByBranchId(branchId);
+
+        List<WorkingEntry> workingEntries = manifestEntries.stream()
+                .map(entry -> new WorkingEntry(
+                        branch,
+                        entry.getPath(),
+                        entry.getObject()
+                ))
+                .toList();
+
+        workingEntryRepository.saveAll(workingEntries);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isClean(UUID branchId, UUID manifestId) {
+        List<WorkingEntry> workingEntries =
+                workingEntryRepository
+                        .findAllByBranchIdOrderByPathAsc(branchId);
+
+        List<ManifestEntry> manifestEntries =
+                manifestEntryRepository
+                        .findAllByManifestIdOrderByPathAsc(manifestId);
+
+        Map<String, String> workingHashes = workingEntries.stream()
+                        .collect(Collectors.toMap(
+                                WorkingEntry::getPath,
+                                entry -> entry.getObject().getContentHash()
+                        ));
+
+        Map<String, String> manifestHashes =
+                manifestEntries.stream()
+                        .collect(Collectors.toMap(
+                                ManifestEntry::getPath,
+                                entry -> entry.getObject().getContentHash()
+                        ));
+
+        return workingHashes.equals(manifestHashes);
     }
 }

@@ -16,6 +16,7 @@ public class ManifestController {
 
     private final ManifestService manifestService;
 
+    // ONLY FOR TESTING PURPOSES
     @PostMapping
     public ResponseEntity<ManifestResponse> createManifest(
             @PathVariable UUID repoId,

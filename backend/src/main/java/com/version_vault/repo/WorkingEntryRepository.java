@@ -13,4 +13,6 @@ public interface WorkingEntryRepository extends JpaRepository<WorkingEntry, UUID
 
     List<WorkingEntry> findAllByBranchIdOrderByPathAsc(UUID branchId);
 
+    void deleteAllByBranchId(UUID branchId);
+
 }

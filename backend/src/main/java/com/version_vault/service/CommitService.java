@@ -46,7 +46,7 @@ public class CommitService {
         // Find author/owner
         // provided by jwt
 
-        // create snapshot of current working tree
+        // create a snapshot of the current working tree
         Manifest manifest = manifestService.createManifestEntity(branchId);
 
         // create commit
@@ -269,58 +269,190 @@ public class CommitService {
     }
 
     @Transactional(readOnly = true)
-    public MergeBaseResponse findMergeBase(UUID commitAId, UUID commitBId, User owner) {
+    public MergeBaseResponse findMergeBase(UUID commitAId, UUID commitBId, User user) {
         Commit commitA = commitRepository.findById(commitAId)
-                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitAId));
-        Commit commitB = commitRepository.findById(commitBId)
-                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitBId));
-
-        if (!commitA.getRepository().getId().equals(commitB.getRepository().getId())) {
-            throw new ResourceNotFoundException("Commits do not belong to the same repository");
-        }
-
-        if (!commitA.getRepository().getOwner().getId().equals(owner.getId())) {
-            throw new UnauthorizedException("You are not the owner of this repository");
-        }
-
-        Set<UUID> commitBAncestors = collectAncestors(commitBId);
-        Commit current = commitA;
-
-        while (current != null) {
-            if (commitBAncestors.contains(current.getId())) {
-                return new MergeBaseResponse(
-                        commitAId,
-                        commitBId,
-                        current.getId()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Commit not found with id " + commitAId
+                        )
                 );
-            }
-            current = current.getParentCommit();
+
+        Commit commitB = commitRepository.findById(commitBId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Commit not found with id " + commitBId
+                        )
+                );
+
+        if (!commitA.getRepository().getId()
+                .equals(commitB.getRepository().getId())) {
+
+            throw new UnauthorizedException(
+                    "Commits must belong to the same repository"
+            );
         }
+
+        if (!commitA.getRepository().getOwner().getId()
+                .equals(user.getId())) {
+
+            throw new UnauthorizedException(
+                    "You are not authorized to access this repository"
+            );
+        }
+
+        UUID mergeBaseId = findMergeBaseId(commitA, commitB);
 
         return new MergeBaseResponse(
                 commitAId,
                 commitBId,
-                null
+                mergeBaseId
         );
+    }
+
+    public UUID findMergeBaseId(Commit commitA, Commit commitB) {
+
+        Map<UUID, Integer> distancesA = collectAncestorDistances(commitA);
+        Map<UUID, Integer> distancesB = collectAncestorDistances(commitB);
+
+        UUID bestAncestor = null;
+        int bestMaxDistance = Integer.MAX_VALUE;
+        int bestTotalDistance = Integer.MAX_VALUE;
+
+        for (UUID ancestorId : distancesA.keySet()) {
+
+            Integer distanceB = distancesB.get(ancestorId);
+
+            if (distanceB == null) {
+                continue;
+            }
+
+            int distanceA = distancesA.get(ancestorId);
+
+            int maxDistance = Math.max(distanceA, distanceB);
+            int totalDistance = distanceA + distanceB;
+
+            if (
+                    maxDistance < bestMaxDistance
+                            || (
+                            maxDistance == bestMaxDistance
+                                    && totalDistance < bestTotalDistance
+                    )
+            ) {
+                bestAncestor = ancestorId;
+                bestMaxDistance = maxDistance;
+                bestTotalDistance = totalDistance;
+            }
+        }
+
+        return bestAncestor;
+    }
+
+    private Map<UUID, Integer> collectAncestorDistances(Commit start) {
+
+        Map<UUID, Integer> distances = new HashMap<>();
+        Queue<Commit> queue = new ArrayDeque<>();
+
+        queue.add(start);
+        distances.put(start.getId(), 0);
+
+        while (!queue.isEmpty()) {
+
+            Commit current = queue.poll();
+
+            int currentDistance = distances.get(current.getId());
+
+            if (current.getParentCommit() != null) {
+
+                Commit parent = current.getParentCommit();
+
+                if (!distances.containsKey(parent.getId())) {
+                    distances.put(
+                            parent.getId(),
+                            currentDistance + 1
+                    );
+
+                    queue.add(parent);
+                }
+            }
+
+            if (current.getSecondParentCommit() != null) {
+
+                Commit secondParent = current.getSecondParentCommit();
+
+                if (!distances.containsKey(secondParent.getId())) {
+                    distances.put(
+                            secondParent.getId(),
+                            currentDistance + 1
+                    );
+
+                    queue.add(secondParent);
+                }
+            }
+        }
+
+        return distances;
     }
 
     /**
     * c1 -> c2 -> c3 -> null: Now c3 will have {c3, c2, c1} as ancestors
     * @c1 -> null: Now c1 will have {c1} as ancestor
     * */
-    private Set<UUID> collectAncestors(UUID commitId) {
+    private Set<UUID> collectAncestorIds(Commit start) {
 
-        Set<UUID> ancestors = new HashSet<>();
+        Set<UUID> visited = new HashSet<>();
+        Deque<Commit> stack = new ArrayDeque<>();
 
-        Commit current = commitRepository.findById(commitId)
-                .orElseThrow(() -> new ResourceNotFoundException("Commit not found with id " + commitId));
+        stack.push(start);
 
-        while (current != null) {
-            ancestors.add(current.getId());
-            current = current.getParentCommit();
+        while (!stack.isEmpty()) {
+
+            Commit current = stack.pop();
+
+            if (!visited.add(current.getId())) {
+                continue;
+            }
+
+            if (current.getParentCommit() != null) {
+                stack.push(current.getParentCommit());
+            }
+
+            if (current.getSecondParentCommit() != null) {
+                stack.push(current.getSecondParentCommit());
+            }
         }
 
-        return ancestors;
+        return visited;
+    }
+
+    public boolean isAncestor(Commit ancestor, Commit descendant) {
+
+        Set<UUID> visited = new HashSet<>();
+        Deque<Commit> stack = new ArrayDeque<>();
+
+        stack.push(descendant);
+
+        while (!stack.isEmpty()) {
+
+            Commit current = stack.pop();
+
+            if (!visited.add(current.getId())) {
+                continue;
+            }
+
+            if (current.getId().equals(ancestor.getId())) {
+                return true;
+            }
+
+            if (current.getParentCommit() != null) {
+                stack.push(current.getParentCommit());
+            }
+
+            if (current.getSecondParentCommit() != null) {
+                stack.push(current.getSecondParentCommit());
+            }
+        }
+
+        return false;
     }
 
     private void validatePath(String path) {

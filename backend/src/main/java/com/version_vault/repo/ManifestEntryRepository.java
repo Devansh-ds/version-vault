@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ManifestEntryRepository
-        extends JpaRepository<ManifestEntry, UUID> {
+public interface ManifestEntryRepository extends JpaRepository<ManifestEntry, UUID> {
 
     List<ManifestEntry> findAllByManifestIdOrderByPathAsc(UUID manifestId);
 

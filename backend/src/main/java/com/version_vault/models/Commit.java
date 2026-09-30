@@ -35,6 +35,14 @@ public class Commit extends BaseEntity {
     )
     private Commit parentCommit;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "second_parent_commit_id",
+            foreignKey = @ForeignKey(name = "fk_commits_second_parent")
+    )
+    private Commit secondParentCommit;
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
             name = "manifest_id",
@@ -71,6 +79,24 @@ public class Commit extends BaseEntity {
         super(UUID.randomUUID(), java.time.Instant.now());
         this.repository = repository;
         this.parentCommit = parentCommit;
+        this.secondParentCommit = null;
+        this.manifest = manifest;
+        this.author = author;
+        this.message = message;
+    }
+
+    public Commit(
+            Repository repository,
+            Commit parentCommit,
+            Commit secondParentCommit,
+            Manifest manifest,
+            User author,
+            String message
+    ) {
+        super(UUID.randomUUID(), java.time.Instant.now());
+        this.repository = repository;
+        this.parentCommit = parentCommit;
+        this.secondParentCommit = secondParentCommit;
         this.manifest = manifest;
         this.author = author;
         this.message = message;
