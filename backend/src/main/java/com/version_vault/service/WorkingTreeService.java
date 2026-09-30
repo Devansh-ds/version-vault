@@ -151,17 +151,16 @@ public class WorkingTreeService {
     public void replaceWithManifest(UUID branchId, UUID manifestId) {
 
         Branch branch = branchRepository.findById(branchId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Branch not found with id " + branchId
-                        )
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Branch not found with id " + branchId));
 
         List<ManifestEntry> manifestEntries =
                 manifestEntryRepository
                         .findAllByManifestIdOrderByPathAsc(manifestId);
 
         workingEntryRepository.deleteAllByBranchId(branchId);
+
+        // Make sure DELETE reaches PostgreSQL before INSERTs.
+        workingEntryRepository.flush();
 
         List<WorkingEntry> workingEntries = manifestEntries.stream()
                 .map(entry -> new WorkingEntry(

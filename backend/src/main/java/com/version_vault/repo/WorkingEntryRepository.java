@@ -2,6 +2,9 @@ package com.version_vault.repo;
 
 import com.version_vault.models.WorkingEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +16,11 @@ public interface WorkingEntryRepository extends JpaRepository<WorkingEntry, UUID
 
     List<WorkingEntry> findAllByBranchIdOrderByPathAsc(UUID branchId);
 
-    void deleteAllByBranchId(UUID branchId);
+    @Modifying
+    @Query("""
+    DELETE FROM WorkingEntry w
+    WHERE w.branch.id = :branchId
+""")
+    void deleteAllByBranchId(@Param("branchId") UUID branchId);
 
 }
