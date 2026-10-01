@@ -1,0 +1,75 @@
+services:
+  postgres:
+
+    image: postgres:17
+
+    container_name: versionvault-postgres
+
+    environment:
+      POSTGRES_DB: vault
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d vault"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: versionvault-backend
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+
+    environment:
+
+      # Database
+      DB_URL: jdbc:postgresql://postgres:5432/vault
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+
+      # Storage
+      STORAGE_ROOT: /app/storage
+      STORAGE_TYPE: local
+
+      # Upload limits
+      MAX_FILE_SIZE: 5MB
+      MAX_REQUEST_SIZE: 6MB
+
+      # JWT
+      JWT_SECRET_KEY: b15f7819606774c89cbc1477c9dcbf149683af67ed2ca3e875718850c39330ce
+      JWT_EXPIRATION: 86400000
+      REFRESH_TOKEN_EXPIRATION: 604800000
+
+      # GC
+      GC_GRACE_PERIOD_HOURS: 1
+
+      # JPA
+      JPA_SHOW_SQL: "false"
+
+    volumes:
+      - ./storage:/app/storage
+
+
+volumes:
+  postgres_data:

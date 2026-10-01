@@ -1,0 +1,12 @@
+# VersionVault local object storage
+/storage/objects/
+
+# Java / Maven
+/backend/target/
+
+# IDE
+.idea/
+*.iml
+
+# Environment / secrets
+.env

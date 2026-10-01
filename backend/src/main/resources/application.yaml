@@ -1,38 +1,43 @@
 spring:
   application:
     name: backend
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/vault
-    username: postgres
-    password: password
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/vault}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
   jpa:
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:true}
     hibernate:
       ddl-auto: validate
     open-in-view: false
+
   flyway:
     locations: classpath:db/migration
     enabled: true
+
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 6MB
+      max-file-size: ${MAX_FILE_SIZE:5MB}
+      max-request-size: ${MAX_REQUEST_SIZE:6MB}
 
 application:
   storage:
-    root: './storage'
-    type: local   # 'local' or 's3'
+    root: ${STORAGE_ROOT:./storage}
+    type: ${STORAGE_TYPE:local}
     s3:
       bucket: ${S3_BUCKET:}
       region: ${AWS_REGION:ap-south-1}
+
   security:
     jwt:
-      secret-key: b15f7819606774c89cbc1477c9dcbf149683af67ed2ca3e875718850c39330ce
-      expiration: 86400000  # a day
+      secret-key: ${JWT_SECRET_KEY:b15f7819606774c89cbc1477c9dcbf149683af67ed2ca3e875718850c39330ce}
+      expiration: ${JWT_EXPIRATION:86400000}
       refresh-token:
-        expiration: 604800000  # 7 days
+        expiration: ${REFRESH_TOKEN_EXPIRATION:604800000}
+
   gc:
-    grace-period-hours: 1
+    grace-period-hours: ${GC_GRACE_PERIOD_HOURS:1}
 
 springdoc:
   api-docs:
