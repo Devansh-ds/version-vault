@@ -1,5 +1,6 @@
 # VersionVault local object storage
-/storage/objects/
+/storage/objects/*
+!/storage/objects/.gitkeep
 
 # Java / Maven
 /backend/target/
