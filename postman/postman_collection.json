@@ -1,0 +1,1557 @@
+{
+  "info": {
+    "_postman_id": "9cb077f4-27d9-4b34-93ca-4670e7d49efc",
+    "name": "VersionVault",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37893551"
+  },
+  "item": [
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "create user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"u2\",\r\n    \"email\": \"u2@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "create user",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"u2\",\r\n    \"email\": \"u2@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/users",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 03:58:38 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"d427ae06-fcdb-4514-bc7e-e9b129c8215e\",\n  \"username\": \"u2\",\n  \"email\": \"u2@gmail.com\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "get by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users/d427ae06-fcdb-4514-bc7e-e9b129c8215e",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "d427ae06-fcdb-4514-bc7e-e9b129c8215e"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by username",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users/u?username=u2",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "u"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "u2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users/e?email=u1@gmail.com",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "e"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "u1@gmail.com"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "repository",
+      "item": [
+        {
+          "name": "create repo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"ninth\",\r\n    \"description\": \"devansh's ninth repo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/repo",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get repo by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get repo by id",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/repo/{{repoId}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "repo",
+                    "{{repoId}}"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 28 Sep 2026 04:04:28 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"d87e005b-137f-4d30-8c65-f2fc4b512101\",\n  \"name\": \"u1_repo1\",\n  \"description\": \"u1_repo1_desc\",\n  \"createdAt\": \"2026-09-27T08:11:54.300955Z\",\n  \"updatedAt\": \"2026-09-27T08:11:54.300955Z\",\n  \"ownerId\": \"434e6134-5239-4235-a5ab-dfa1e395f8d8\",\n  \"ownerName\": \"user1\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "all repos by userId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/all",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by repo name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/name/u1_repo1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "name",
+                "u1_repo1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "branch",
+      "item": [
+        {
+          "name": "get branch by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/{{branchId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create branch",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"feature1\",\r\n    \"headCommitId\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all branches by repo id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/all",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "rename branch",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"feature2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/{{branchId}}/rename",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "{{branchId}}",
+                "rename"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete branch by id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/{{branchId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "{{branchId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get branch by repo id and name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch?branchName=feature2",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch"
+              ],
+              "query": [
+                {
+                  "key": "branchName",
+                  "value": "feature2"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "objects",
+      "item": [
+        {
+          "name": "Upload files",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "file",
+                "value": "",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/Devan/Downloads/id card.pdf"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/objects",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "objects"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Upload files",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "file",
+                    "value": "",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Devan/Downloads/First_file.txt"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/objects",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "objects"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Fri, 25 Sep 2026 10:12:09 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"71d3d693-65a4-4514-957f-3c338dad93ad\",\n  \"contentHash\": \"8af14098158d3ae71272ea26423a0356ebd5679025728797620872787e49a125\",\n  \"storageKey\": \"objects/8a/f1/8af14098158d3ae71272ea26423a0356ebd5679025728797620872787e49a125\",\n  \"size\": 16,\n  \"createdAt\": \"2026-09-25T10:12:09.599255900Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "get File by object id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/objects/71d3d693-65a4-4514-957f-3c338dad93ad",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "objects",
+                "71d3d693-65a4-4514-957f-3c338dad93ad"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get file metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/objects/71d3d693-65a4-4514-957f-3c338dad93ad/metadata",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "objects",
+                "71d3d693-65a4-4514-957f-3c338dad93ad",
+                "metadata"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "working-tree",
+      "item": [
+        {
+          "name": "upload file on branch",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/Devan/Downloads/sample_data/B.txt"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/branches/{{branchId}}/files/A.txt",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branches",
+                "{{branchId}}",
+                "files",
+                "A.txt"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "read file using path",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branches/{{branchId}}/files/First.txt",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branches",
+                "{{branchId}}",
+                "files",
+                "First.txt"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List all files by branch",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branches/{{sourceBranchId}}/files",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branches",
+                "{{sourceBranchId}}",
+                "files"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "remove file from working tree",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branches/{{branchId}}/files/A.txt",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branches",
+                "{{branchId}}",
+                "files",
+                "A.txt"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "manifests-test-only",
+      "item": [
+        {
+          "name": "Create manifest form working tree",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/{{branchId}}/manifest",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "{{branchId}}",
+                "manifest"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by manifestId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/repo/{{repoId}}/branch/{{branchId}}/manifest/01abf3c1-68d5-412a-8f52-619634274a68",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "repo",
+                "{{repoId}}",
+                "branch",
+                "{{branchId}}",
+                "manifest",
+                "01abf3c1-68d5-412a-8f52-619634274a68"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "commit",
+      "item": [
+        {
+          "name": "create commit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"message\": \"c3\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by commit id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/4bc3bd73-fbf8-4e17-ac15-741bb49844da",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit",
+                "4bc3bd73-fbf8-4e17-ac15-741bb49844da"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get commit history per branch",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "cursor",
+                "value": "",
+                "disabled": true
+              },
+              {
+                "key": "limit",
+                "value": "1",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{targetBranchId}}/commit/history",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{targetBranchId}}",
+                "commit",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "cursor",
+                  "value": "ad7f322c-e00b-492f-b801-e21802fd740c",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "get commit history per branch",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/history",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "branch",
+                    "{{branchId}}",
+                    "commit",
+                    "history"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 28 Sep 2026 04:16:08 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"fdda3901-dd59-4d83-90bc-9f26f9be4061\",\n    \"repositoryId\": \"d87e005b-137f-4d30-8c65-f2fc4b512101\",\n    \"parentCommitId\": \"ad7f322c-e00b-492f-b801-e21802fd740c\",\n    \"manifestId\": \"095b768c-58dd-48d1-967a-b2ec4855b8cb\",\n    \"authorId\": \"434e6134-5239-4235-a5ab-dfa1e395f8d8\",\n    \"message\": \"C3\",\n    \"createdAt\": \"2026-09-28T04:14:16.598213Z\"\n  },\n  {\n    \"id\": \"ad7f322c-e00b-492f-b801-e21802fd740c\",\n    \"repositoryId\": \"d87e005b-137f-4d30-8c65-f2fc4b512101\",\n    \"parentCommitId\": \"c68f51e2-adde-4235-817b-56191590f557\",\n    \"manifestId\": \"15d25ac8-4a22-46ec-af25-3fff71995a18\",\n    \"authorId\": \"434e6134-5239-4235-a5ab-dfa1e395f8d8\",\n    \"message\": \"C2\",\n    \"createdAt\": \"2026-09-28T04:12:26.073593Z\"\n  },\n  {\n    \"id\": \"c68f51e2-adde-4235-817b-56191590f557\",\n    \"repositoryId\": \"d87e005b-137f-4d30-8c65-f2fc4b512101\",\n    \"parentCommitId\": null,\n    \"manifestId\": \"98b64b94-c242-4b00-ae9a-1e717221dc85\",\n    \"authorId\": \"434e6134-5239-4235-a5ab-dfa1e395f8d8\",\n    \"message\": \"C1\",\n    \"createdAt\": \"2026-09-28T04:11:39.185246Z\"\n  }\n]"
+            },
+            {
+              "name": "get cursor+limit commit history",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "cursor",
+                    "value": "",
+                    "disabled": true
+                  },
+                  {
+                    "key": "limit",
+                    "value": "1",
+                    "disabled": true
+                  }
+                ],
+                "url": {
+                  "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/history?cursor=ad7f322c-e00b-492f-b801-e21802fd740c&limit=1",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "branch",
+                    "{{branchId}}",
+                    "commit",
+                    "history"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "ad7f322c-e00b-492f-b801-e21802fd740c"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 28 Sep 2026 04:37:35 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"commits\": [\n    {\n      \"id\": \"ad7f322c-e00b-492f-b801-e21802fd740c\",\n      \"repositoryId\": \"d87e005b-137f-4d30-8c65-f2fc4b512101\",\n      \"parentCommitId\": \"c68f51e2-adde-4235-817b-56191590f557\",\n      \"manifestId\": \"15d25ac8-4a22-46ec-af25-3fff71995a18\",\n      \"authorId\": \"434e6134-5239-4235-a5ab-dfa1e395f8d8\",\n      \"message\": \"C2\",\n      \"createdAt\": \"2026-09-28T04:12:26.073593Z\"\n    }\n  ],\n  \"nextCursor\": \"c68f51e2-adde-4235-817b-56191590f557\",\n  \"hasMore\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "get all files by commit id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/{{commtId}}/files",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit",
+                "{{commtId}}",
+                "files"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get byte content using path in commit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/{{commitId}}/files/first2.txt",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit",
+                "{{commitId}}",
+                "files",
+                "first2.txt"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "commit diff with parent commit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/{{commitId}}/diff",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit",
+                "{{commitId}}",
+                "diff"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get merge base commit id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{branchId}}/commit/{{commitAId}}/merge-base/{{commitBId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{branchId}}",
+                "commit",
+                "{{commitAId}}",
+                "merge-base",
+                "{{commitBId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "security",
+      "item": [
+        {
+          "name": "register user",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"fullname\": \"devansh\",\r\n    \"email\": \"devansh@gmail.com\",\r\n    \"password\": \"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/register",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get user by jwt",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/auth",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login/authenticate user",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"user1@gmail.com\",\r\n    \"password\": \"user1p\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/authenticate",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "authenticate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Merge branch",
+      "item": [
+        {
+          "name": "merge branhces",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"message\": \"merging branches\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/branch/{{targetBranchId}}/merge/{{sourceBranchId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "branch",
+                "{{targetBranchId}}",
+                "merge",
+                "{{sourceBranchId}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "conflict merge",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"message\": \"merging branches: conflict\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/branch/{{targetBranchId}}/merge/{{sourceBranchId}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "branch",
+                    "{{targetBranchId}}",
+                    "merge",
+                    "{{sourceBranchId}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 09:01:58 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"targetBranchId\": \"be55ac56-8bdb-4de0-8d12-efa5584ae245\",\n  \"sourceBranchId\": \"f1a4785f-dc01-4ee6-b755-98902ac52c36\",\n  \"oursCommitId\": \"a6aecec4-8fc6-42e6-be0e-0f8b8f3bef74\",\n  \"theirsCommitId\": \"2adc5be5-5a0c-41cb-b292-efa82e11c4b2\",\n  \"mergeBaseCommitId\": \"8e07c3ef-bb36-4e51-9ec1-bb36fbdb9f98\",\n  \"mergeCommitId\": null,\n  \"status\": \"CONFLICT\",\n  \"conflicts\": [\n    {\n      \"path\": \"A.txt\",\n      \"baseObjectId\": \"0f99b830-2811-4a1e-a068-4f61e5e31510\",\n      \"oursObjectId\": \"436389b1-9ba2-4110-861a-4245173afbf4\",\n      \"theirsObjectId\": \"ccf63cc7-184d-4958-8193-42f2abee92fe\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "garbage collector",
+      "item": [
+        {
+          "name": "scan for unused objects",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/gc/scan",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gc",
+                "scan"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "scan for unused objects",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/gc/scan",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "gc",
+                    "scan"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 14:01:14 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"totalObjects\": 16,\n  \"reachableObjects\": 13,\n  \"garbageObjects\": 3,\n  \"eligibleObjects\": 2,\n  \"protectedObjects\": 1,\n  \"deletedObjects\": 0,\n  \"reclaimedBytes\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "clean storage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/gc/clean",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "gc",
+                "clean"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "clean storage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/gc/clean",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "gc",
+                    "clean"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "vary",
+                  "value": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "no-cache, no-store, max-age=0, must-revalidate"
+                },
+                {
+                  "key": "pragma",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "expires",
+                  "value": "0"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "transfer-encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 14:01:28 GMT"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"totalObjects\": 16,\n  \"reachableObjects\": 13,\n  \"garbageObjects\": 3,\n  \"eligibleObjects\": 2,\n  \"protectedObjects\": 1,\n  \"deletedObjects\": 1,\n  \"reclaimedBytes\": 36\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{json_web_token_1b3v}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "repoId",
+      "value": ""
+    },
+    {
+      "key": "branchId",
+      "value": ""
+    },
+    {
+      "key": "jwtToken",
+      "value": ""
+    },
+    {
+      "key": "json_web_token_1b3v",
+      "secret": true
+    },
+    {
+      "key": "commitId",
+      "value": ""
+    },
+    {
+      "key": "commitAId",
+      "value": ""
+    },
+    {
+      "key": "commitBId",
+      "value": ""
+    },
+    {
+      "key": "targetBranchId",
+      "value": ""
+    },
+    {
+      "key": "sourceBranchId",
+      "value": ""
+    }
+  ]
+}
