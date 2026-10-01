@@ -3,12 +3,17 @@ package com.version_vault.storage;
 import com.version_vault.configs.StorageProperties;
 import com.version_vault.exceptions.ObjectStorageException;
 import com.version_vault.exceptions.ResourceNotFoundException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.*;
 
-@Component
+@ConditionalOnProperty(
+        name = "application.storage.type",
+        havingValue = "local",
+        matchIfMissing = true
+)
 public class LocalObjectStorage implements  ObjectStorage {
 
     private final Path rootPath;

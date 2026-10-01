@@ -1,7 +1,6 @@
 spring:
   application:
     name: backend
-
   datasource:
     url: jdbc:postgresql://localhost:5432/vault
     username: postgres
@@ -14,10 +13,18 @@ spring:
   flyway:
     locations: classpath:db/migration
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
 
 application:
   storage:
     root: './storage'
+    type: local   # 'local' or 's3'
+    s3:
+      bucket: ${S3_BUCKET:}
+      region: ${AWS_REGION:ap-south-1}
   security:
     jwt:
       secret-key: b15f7819606774c89cbc1477c9dcbf149683af67ed2ca3e875718850c39330ce

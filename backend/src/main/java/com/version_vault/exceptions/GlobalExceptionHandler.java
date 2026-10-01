@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(ResourceNotFoundException ex ) {
         var errors = new HashMap<String, String>(); 
-        errors.put("user", ex.getMessage());
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(errors));
@@ -37,38 +38,54 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(ResourceAlreadyExistsException ex ) {
         var errors = new HashMap<String, String>();
-        errors.put("user", ex.getMessage());
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(errors));
     }
 
     @ExceptionHandler(ObjectStorageException.class)
-    public ResponseEntity<String> handleObjectStorageException(ObjectStorageException ex ) {
+    public ResponseEntity<ErrorResponse> handleObjectStorageException(ObjectStorageException ex ) {
+        var errors = new HashMap<String, String>();
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ex.getMessage());
+                .body(new ErrorResponse(errors));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<String> handleTokenInvalidException(UnauthorizedException ex ) {
+    public ResponseEntity<ErrorResponse> handleTokenInvalidException(UnauthorizedException ex) {
+        var errors = new HashMap<String, String>();
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ex.getMessage());
+                .body(new ErrorResponse(errors));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex ) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex ) {
+        var errors = new HashMap<String, String>();
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+                .body(new ErrorResponse(errors));
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalStateException ex ) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalStateException ex ) {
+        var errors = new HashMap<String, String>();
+        errors.put("message", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+                .body(new ErrorResponse(errors));
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
+        var errors = new HashMap<String, String>();
+        errors.put("message", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.CONTENT_TOO_LARGE)
+                .body(new ErrorResponse(errors));
+    }
 }
