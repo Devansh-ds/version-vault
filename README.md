@@ -6,6 +6,40 @@ It models the core mechanics behind a version control system: repositories, bran
 
 ---
 
+## Contents
+
+* [Features](#features)
+* [Architecture](#architecture)
+* [Core Data Model](#core-data-model)
+* [Commit & Branch Model](#Working-Tree-vs-Commit)
+* [Content-Addressed Object Storage](#content-addressed-object-storage)
+* [Branching](#branching)
+* [Commit History](#commit-history)
+* [Diffs](#diffs)
+* [Three-Way Merge](#three-way-merge)
+* [Merge-Base Detection](#merge-base-detection)
+* [Garbage Collection](#garbage-collection)
+* [Optimistic Concurrency Control](#optimistic-concurrency-control)
+* [Storage Backends](#storage-backends)
+* [Authentication & Authorization](#authentication--authorization)
+* [API Documentation](#api-documentation)
+* [Tech Stack](#tech-stack)
+* [Running Locally](#running-locally)
+* [Local Filesystem Storage](#local-filesystem-storage)
+* [Using AWS S3 Storage](#using-aws-s3-storage)
+* [Configuration](#configuration)
+* [Upload Limits](#upload-limits)
+* [Project Structure](#project-structure)
+* [Example Workflow](#example-workflow)
+* [Engineering Decisions](#engineering-decisions)
+* [Known Limitations](#known-limitations)
+
+### Architecture Diagrams
+
+For detailed architecture and flow diagrams, see the [VersionVault Architecture & Diagrams](diagrams).
+
+---
+
 ## Features
 
 ### Version Control
@@ -121,7 +155,7 @@ Object
       └── S3ObjectStorage
 ```
 
-### Working Tree vs Commit
+### Working Tree vs. Commit
 
 A branch's working tree is mutable:
 
