@@ -4,8 +4,6 @@
 
 It models the core mechanics behind a version control system: repositories, branches, mutable working trees, immutable commits, manifests, historical file retrieval, commit diffs, merge-base detection, three-way merges, and reachability-based garbage collection.
 
-**Repository:** https://github.com/Devansh-ds/version-vault
-
 ---
 
 ## Features
