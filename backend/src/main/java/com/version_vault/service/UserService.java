@@ -1,6 +1,7 @@
 package com.version_vault.service;
 
 import com.version_vault.exceptions.ResourceNotFoundException;
+import com.version_vault.exceptions.UnauthorizedException;
 import com.version_vault.mapper.UserMapper;
 import com.version_vault.models.User;
 import com.version_vault.repo.UserRepository;
@@ -61,6 +62,14 @@ public class UserService {
                 .orElseThrow(() ->
                         new BadCredentialsException("User not found with email: " + email));
         return userMapper.toUserResponse(user);
+    }
+
+    public void validateSystemAdmin(User user) {
+        if (!"admin".equalsIgnoreCase(user.getOriginalUsername()) || !"admin@gmail.com".equalsIgnoreCase(user.getEmail())) {
+            throw new UnauthorizedException(
+                    "Only the system administrator can perform this operation"
+            );
+        }
     }
 
 }

@@ -24,9 +24,14 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) throws ResourceAlreadyExistsException {
 
+        if ("admin".equalsIgnoreCase(request.getFullname().trim()) ||
+                "admin@gmail.com".equalsIgnoreCase(request.getEmail().trim())) {
+            throw new ResourceAlreadyExistsException("Username/Email already in use");
+        }
+
         var user = new User(
-                request.getFullname(),
-                request.getEmail(),
+                request.getFullname().trim(),
+                request.getEmail().trim(),
                 passwordEncoder.encode(request.getPassword())
         );
 
@@ -47,8 +52,8 @@ public class AuthenticationService {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        request.getEmail().trim(),
+                        request.getPassword().trim()
                 )
         );
 

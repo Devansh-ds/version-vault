@@ -4,6 +4,7 @@ import com.version_vault.models.ObjectEntity;
 import com.version_vault.dtos.response.ObjectContent;
 import com.version_vault.dtos.response.ObjectResponse;
 import com.version_vault.service.ObjectService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
+@Hidden
 @RestController
 @RequestMapping("/objects")
 @RequiredArgsConstructor
